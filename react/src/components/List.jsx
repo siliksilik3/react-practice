@@ -1,10 +1,10 @@
 import { Post } from "./Post";
-import NewPost from "./NewPost";
+import NewPost from "../routes/NewPost";
 import classes from "./List.module.css";
 import { useEffect, useState } from "react";
 import { Modal } from "./Modal";
 
-export  function List({ modalVisability, hideModal }) {
+export  function List() {
   const [posts, setPosts] = useState([]);
   const [isFetching, setIsFetching]= useState(false)
  useEffect(()=>{
@@ -29,12 +29,6 @@ export  function List({ modalVisability, hideModal }) {
   }
   return (
     <>
-      {modalVisability ? (
-        <Modal onClose={hideModal}>
-          <NewPost onCancel={hideModal} onAddPost={addPostHandler} />
-        </Modal>
-      ) : null}
-
         {!isFetching && posts.length !== 0 && (
                 <ul className={classes.posts}>
          { posts.map((post) => (
