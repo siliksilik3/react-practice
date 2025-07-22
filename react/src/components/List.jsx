@@ -1,46 +1,24 @@
 import { Post } from "./Post";
 import NewPost from "../routes/NewPost";
 import classes from "./List.module.css";
-import { useEffect, useState } from "react";
-import { Modal } from "./Modal";
+
+import { useLoaderData } from "react-router-dom";
 
 export  function List() {
-  const [posts, setPosts] = useState([]);
-  const [isFetching, setIsFetching]= useState(false)
- useEffect(()=>{
-  async function featchPosts() {
-    setIsFetching(true)
-    const response=await fetch('http://localhost:3080/posts');
-    const resData= await response.json();
-    setPosts(resData.posts)
-    setIsFetching(false)
-  }
-  featchPosts()
- }, [])
-  function addPostHandler(postData) {
-    const postBackEnd = fetch('http://localhost:3080/posts', {
-      method: 'POST',
-      body: JSON.stringify(postData),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    setPosts([postData, ...posts]);
-  }
+  const posts= useLoaderData();
   return (
     <>
-        {!isFetching && posts.length !== 0 && (
+        { posts.length !== 0 && (
                 <ul className={classes.posts}>
          { posts.map((post) => (
-            <Post author={post.author} body={post.body} key={post.body} />
+            <Post author={post.author} body={post.body} key={post.body} id={post.id}/>
           ))}
           </ul>
-        )} {!isFetching && posts.length === 0 && (
+        )} {posts.length === 0 && (
           <div style={{ textAlign: "center" }}>
             <h2>No Post Yet</h2>
           </div>
         )}
-        {isFetching && <p>LOADING POSTS...</p>}
     </>
   );
 }
